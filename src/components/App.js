@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 const App = () => {
     const [input, setInput] = useState('');
-    const [skills, setSkills] = useState([]);
+    const [skills, setSkills] = useState(['Java', 'DSA', 'Algorithms', 'Java Script', 'Database', 'Networking']);
 
     function handleClick(e){
         e.preventDefault();
