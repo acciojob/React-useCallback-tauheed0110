@@ -16,7 +16,8 @@ const UseCallbackComp = () => {
     const [skill, setSkill] = useState('')
     const [skills, setSkills] = useState(['HTML', 'CSS', 'Javascript'])
   
-    const addSkill = useCallback(() => {
+    const addSkill = useCallback((e) => {
+        e.preventDefault();
       if (skill.trim() && !skills.includes(skill.trim())) {
         setSkills([...skills, skill.trim()])
       }
@@ -34,16 +35,18 @@ const UseCallbackComp = () => {
     return (
       <>
         <h1 id='heading'>Skill Manager</h1>
-        <input
-          id='skill-input'
-          type='text'
-          value={skill}
-          onChange={(e) => setSkill(e.target.value)}
-          placeholder='Enter a skill'
-        />
-        <button id='skill-add-btn' onClick={addSkill}>
-          Add Skill
-        </button>
+        <form>
+            <input
+            id='skill-input'
+            type='text'
+            value={skill}
+            onChange={(e) => setSkill(e.target.value)}
+            placeholder='Enter a skill'
+            />
+            <button id='skill-add-btn' onClick={(e)=>{addSkill(e)}}>
+            Add Skill
+            </button>
+        </form>
         <SkillList skills={skills} deleteSkill={deleteSkill} />
       </>
     )
@@ -51,7 +54,7 @@ const UseCallbackComp = () => {
 
   const SkillList = React.memo(({ skills, deleteSkill }) => {
     return (
-      <ul>
+      <ul id='skill-list'>
         {skills.map((skill, index) => (
           <li
             key={index}
