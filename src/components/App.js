@@ -32,7 +32,7 @@ function UseCallbackComp({skills, handleSkill}){
 
     return (
         <div>
-            <ul>
+            <ul id='skill-list'>
                 {
                     skills.map((skill, index) => {
                         return <li id={`skill-number-${index}`} key={index}>
