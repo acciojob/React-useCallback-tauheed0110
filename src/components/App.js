@@ -1,26 +1,10 @@
 import React, { useCallback, useState } from 'react';
 
 const App = () => {
-    const [input, setInput] = useState('');
-    const [skills, setSkills] = useState(['HTML', 'CSS', 'Javascript']);
-
-    function handleClick(e){
-        e.preventDefault();
-        setSkills([...skills, input.trim()]);
-        setInput('');
-    }
-    const handleSkill = useCallback((value)=>{
-        setSkills(skills.filter(skill => skill !== value));
-    }, [skills]);
     
   return (
     <div>
-        <h1 id='heading'>Add Skills To The List</h1>
-        <form>
-            <input id='skill-input' type='text' value={input} onChange={(e)=>{setInput(e.target.value)}}/>
-            <button id='skill-add-btn' onClick={(e)=>{handleClick(e)}}>Add Skill</button>
-        </form>
-        <UseCallbackComp skills={skills} handleSkill={handleSkill}/>
+        <UseCallbackComp />
     </div>
   );
 }
@@ -28,20 +12,63 @@ const App = () => {
 export default App;
 
 
-function UseCallbackComp({skills, handleSkill}){
-
-    return (
-        <div>
-            <ul id='skill-list'>
-                {
-                    skills.map((skill, index) => {
-                        return <li id={`skill-number-${index}`} key={index}>
-                                    {skill}
-                                    <button onClick={()=>{handleSkill(skill)}}>Delete</button>
-                                </li>
-                    })
-                }
-            </ul>
-        </div>
+const UseCallbackComp = () => {
+    const [skill, setSkill] = useState('')
+    const [skills, setSkills] = useState(['HTML', 'CSS', 'Javascript'])
+  
+    const addSkill = useCallback(() => {
+      if (skill.trim() && !skills.includes(skill.trim())) {
+        setSkills([...skills, skill.trim()])
+      }
+      setSkill('')
+    }, [skill, skills])
+  
+    const deleteSkill = useCallback(
+      (index) => {
+        const afterDeletion = skills.filter((_, idx) => idx !== index)
+        setSkills(afterDeletion)
+      },
+      [skills]
     )
-}
+  
+    return (
+      <>
+        <h1 id='heading'>Skill Manager</h1>
+        <input
+          id='skill-input'
+          type='text'
+          value={skill}
+          onChange={(e) => setSkill(e.target.value)}
+          placeholder='Enter a skill'
+        />
+        <button id='skill-add-btn' onClick={addSkill}>
+          Add Skill
+        </button>
+        <SkillList skills={skills} deleteSkill={deleteSkill} />
+      </>
+    )
+  }
+
+  const SkillList = React.memo(({ skills, deleteSkill }) => {
+    return (
+      <ul>
+        {skills.map((skill, index) => (
+          <li
+            key={index}
+            id={`skill-number-${index}`}
+            onClick={() => deleteSkill(index)}
+            style={{
+              cursor: 'pointer',
+              margin: '5px 0',
+              padding: '5px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+            }}
+          >
+            {skill}
+          </li>
+        ))}
+      </ul>
+    );
+  });
+  
